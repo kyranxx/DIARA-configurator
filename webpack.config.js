@@ -1,13 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  entry: {
-    main: './frontend/index.js'
-  },
+  entry: './frontend/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].bundle.js',
-    clean: true
+    filename: 'bundle.js'
   },
   module: {
     rules: [
@@ -32,27 +29,14 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
-    alias: {
-      '@': path.resolve(__dirname, 'frontend')
-    }
+    extensions: ['.js', '.jsx']
   },
   devServer: {
-    static: {
-      directory: path.join(__dirname, 'public'),
-    },
-    compress: true,
+    static: './dist',
     port: 3000,
     hot: true,
     proxy: {
       '/api': 'http://localhost:3001'
     }
-  },
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-    },
-  },
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-  devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'eval-source-map'
+  }
 };
