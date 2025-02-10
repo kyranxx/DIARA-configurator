@@ -1,10 +1,13 @@
 const path = require('path');
 
 module.exports = {
-  entry: './frontend/index.js',
+  entry: {
+    main: './frontend/index.js'
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
+    clean: true
   },
   module: {
     rules: [
@@ -44,5 +47,12 @@ module.exports = {
     proxy: {
       '/api': 'http://localhost:3001'
     }
-  }
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
+  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'eval-source-map'
 };
