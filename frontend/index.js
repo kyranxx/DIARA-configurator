@@ -6,24 +6,26 @@ import './index.css';
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, error: null };
   }
 
   static getDerivedStateFromError(error) {
-    return { hasError: true };
+    return { hasError: true, error };
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('Error in component:', error, errorInfo);
+    console.error('Application error:', error);
+    console.error('Error info:', errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
       return (
         <div className="error-boundary">
-          <h1>Something went wrong.</h1>
+          <h1>Something went wrong</h1>
+          <p>{this.state.error?.message || 'An unexpected error occurred'}</p>
           <button onClick={() => window.location.reload()}>
-            Reload Page
+            Reload Application
           </button>
         </div>
       );
@@ -34,15 +36,17 @@ class ErrorBoundary extends React.Component {
 }
 
 const container = document.getElementById('root');
-if (container) {
-  const root = createRoot(container);
-  root.render(
-    <StrictMode>
-      <ErrorBoundary>
-        <BraceletBuilder />
-      </ErrorBoundary>
-    </StrictMode>
-  );
-} else {
-  console.error('Failed to find root element');
+if (!container) {
+  throw new Error('Failed to find root element');
 }
+
+const root = createRoot(container);
+root.render(
+  <StrictMode>
+    <ErrorBoundary>
+      <div className="w-screen h-screen overflow-hidden bg-gray-100">
+        <BraceletBuilder />
+      </div>
+    </ErrorBoundary>
+  </StrictMode>
+);
