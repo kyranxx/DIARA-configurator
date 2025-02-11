@@ -1,33 +1,37 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useLoader } from '@react-three/fiber';
-import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
-const BeadWithTextures = ({ position, beadData, selected, onClick }) => {
-  const textureProps = useTexture({
-    map: beadData?.textures?.diffuse,
-    normalMap: beadData?.textures?.normal,
-    roughnessMap: beadData?.textures?.roughness
+const Bead = React.forwardRef(({ position, textureProps, selected, onClick }, ref) => {
+  const [textures, setTextures] = useState({
+    map: null,
+    normalMap: null,
+    roughnessMap: null
   });
 
-  const meshRef = useRef();
-  
   useEffect(() => {
-    if (textureProps.map) {
-      textureProps.map.encoding = THREE.sRGBEncoding;
-      textureProps.map.needsUpdate = true;
-    }
-  }, [textureProps.map]);
+    const textureLoader = new THREE.TextureLoader();
+    const defaultTexture = textureLoader.load('/images/placeholder-bead.jpg');
+    defaultTexture.encoding = THREE.sRGBEncoding;
+
+    setTextures({
+      map: defaultTexture,
+      normalMap: null,
+      roughnessMap: null
+    });
+  }, []);
 
   return (
     <mesh
-      ref={meshRef}
+      ref={ref}
       position={position}
       onClick={onClick}
     >
       <sphereGeometry args={[0.4, 32, 32]} />
       <meshStandardMaterial
-        {...textureProps}
+        map={textures.map}
+        normalMap={textures.normalMap}
+        roughnessMap={textures.roughnessMap}
         metalness={0.5}
         roughness={0.5}
         color={selected ? '#ff0000' : '#ffffff'}
@@ -35,6 +39,7 @@ const BeadWithTextures = ({ position, beadData, selected, onClick }) => {
       />
     </mesh>
   );
-};
+});
 
-export default BeadWithTextures;
+Bead.displayName = 'Bead';
+export default Bead;
