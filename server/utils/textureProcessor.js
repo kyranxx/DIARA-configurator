@@ -1,4 +1,4 @@
-import sharp from 'sharp';
+const sharp = require('sharp');
 
 const TEXTURE_SIZES = {
   LARGE: 1024,
@@ -6,11 +6,7 @@ const TEXTURE_SIZES = {
   SMALL: 256
 };
 
-/**
- * Processes bead images to generate texture maps for 3D rendering
- * Includes optimization, error handling, and multi-resolution support
- */
-export class TextureProcessor {
+class TextureProcessor {
   constructor(config = {}) {
     this.config = {
       defaultSize: TEXTURE_SIZES.MEDIUM,
@@ -19,9 +15,6 @@ export class TextureProcessor {
     };
   }
 
-  /**
-   * Validates input image and ensures it meets minimum requirements
-   */
   async validateImage(buffer) {
     try {
       const metadata = await sharp(buffer).metadata();
@@ -40,9 +33,6 @@ export class TextureProcessor {
     }
   }
 
-  /**
-   * Generates a normal map from the input image
-   */
   async generateNormalMap(buffer, size) {
     try {
       return await sharp(buffer)
@@ -59,15 +49,12 @@ export class TextureProcessor {
     }
   }
 
-  /**
-   * Generates a roughness map from the input image
-   */
   async generateRoughnessMap(buffer, size) {
     try {
       return await sharp(buffer)
         .resize(size, size)
         .greyscale()
-        .linear(1.5, -0.1) // Adjust contrast for better material properties
+        .linear(1.5, -0.1)
         .normalize()
         .toBuffer();
     } catch (error) {
@@ -75,9 +62,6 @@ export class TextureProcessor {
     }
   }
 
-  /**
-   * Optimizes the base texture for web delivery
-   */
   async optimizeTexture(buffer, size) {
     try {
       return await sharp(buffer)
@@ -89,25 +73,19 @@ export class TextureProcessor {
     }
   }
 
-  /**
-   * Processes an image into all necessary texture maps with optional multi-resolution support
-   */
   async processBeadTexture(imageBuffer, options = {}) {
     try {
-      // Validate input image
       await this.validateImage(imageBuffer);
 
       const size = options.size || this.config.defaultSize;
       const generateMips = options.generateMips || false;
 
-      // Generate all required textures
       const [diffuse, normal, roughness] = await Promise.all([
         this.optimizeTexture(imageBuffer, size),
         this.generateNormalMap(imageBuffer, size),
         this.generateRoughnessMap(imageBuffer, size)
       ]);
 
-      // Generate mipmaps if requested
       const mipMaps = generateMips ? await this.generateMipMaps(imageBuffer) : null;
 
       return {
@@ -128,9 +106,6 @@ export class TextureProcessor {
     }
   }
 
-  /**
-   * Generates mipmap textures for progressive loading
-   */
   async generateMipMaps(buffer) {
     try {
       const sizes = [TEXTURE_SIZES.SMALL, TEXTURE_SIZES.MEDIUM, TEXTURE_SIZES.LARGE];
@@ -147,11 +122,26 @@ export class TextureProcessor {
       throw new Error(`Mipmap generation failed: ${error.message}`);
     }
   }
+
+  // Add method to create placeholder
+  async createPlaceholder() {
+    const whiteBuffer = Buffer.from(
+      '<svg><rect width="256" height="256" fill="#FFFFFF"/></svg>'
+    );
+
+    const jpgBuffer = await sharp(whiteBuffer)
+      .resize(256, 256)
+      .jpeg()
+      .toBuffer();
+
+    return jpgBuffer;
+  }
 }
 
-// Usage example:
-// const processor = new TextureProcessor({ quality: 85 });
-// const textureData = await processor.processBeadTexture(imageBuffer, { 
-//   size: TEXTURE_SIZES.LARGE,
-//   generateMips: true 
-// });
+// Create placeholder on init
+const processor = new TextureProcessor();
+processor.createPlaceholder()
+  .then(buffer => sharp(buffer).toFile('public/images/placeholder-bead.jpg'))
+  .catch(console.error);
+
+module.exports = { TextureProcessor };
