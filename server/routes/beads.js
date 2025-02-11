@@ -1,7 +1,7 @@
-import express from 'express';
-import { Shopify } from '@shopify/shopify-api';
-import multer from 'multer';
-import { TextureProcessor } from '../utils/textureProcessor';
+const express = require('express');
+const { Shopify } = require('@shopify/shopify-api');
+const multer = require('multer');
+const { TextureProcessor } = require('../utils/textureProcessor');
 
 const router = express.Router();
 const textureProcessor = new TextureProcessor({
@@ -9,11 +9,10 @@ const textureProcessor = new TextureProcessor({
   defaultSize: 512
 });
 
-// Configure multer for image uploads
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit
+    fileSize: 10 * 1024 * 1024,
     files: 1
   },
   fileFilter: (req, file, cb) => {
@@ -26,7 +25,6 @@ const upload = multer({
   }
 });
 
-// Error handler middleware
 const handleErrors = (err, req, res, next) => {
   console.error('Error:', err);
   if (err instanceof multer.MulterError) {
@@ -41,12 +39,10 @@ const handleErrors = (err, req, res, next) => {
   });
 };
 
-// Get all available beads with inventory and texture information
 router.get('/beads', async (req, res, next) => {
   try {
     const client = new Shopify.Clients.Rest(req.shop, req.accessToken);
     
-    // Fetch products and their metafields in parallel
     const [productsResponse, metafieldsResponse] = await Promise.all([
       client.get({
         path: 'products',
@@ -87,7 +83,6 @@ router.get('/beads', async (req, res, next) => {
   }
 });
 
-// Add new bead with processed textures
 router.post('/beads', upload.single('image'), async (req, res, next) => {
   try {
     const { name, price, description } = req.body;
@@ -96,13 +91,11 @@ router.post('/beads', upload.single('image'), async (req, res, next) => {
       return res.status(400).json({ error: 'Image file is required' });
     }
 
-    // Process textures with enhanced processor
     const textureData = await textureProcessor.processBeadTexture(
       req.file.buffer,
       { generateMips: true }
     );
 
-    // Create product in Shopify
     const client = new Shopify.Clients.Rest(req.shop, req.accessToken);
     
     const productResponse = await client.post({
@@ -126,14 +119,12 @@ router.post('/beads', upload.single('image'), async (req, res, next) => {
 
     const productId = productResponse.body.product.id;
 
-    // Upload textures to Shopify Files API
     const textureUrls = await Promise.all([
       uploadTextureToShopify(client, textureData.textures.diffuse, 'diffuse'),
       uploadTextureToShopify(client, textureData.textures.normal, 'normal'),
       uploadTextureToShopify(client, textureData.textures.roughness, 'roughness')
     ]);
 
-    // Create metafields for texture URLs
     await Promise.all([
       createTextureMetafield(client, productId, 'texture_diffuse', textureUrls[0]),
       createTextureMetafield(client, productId, 'texture_normal', textureUrls[1]),
@@ -158,7 +149,6 @@ router.post('/beads', upload.single('image'), async (req, res, next) => {
   }
 });
 
-// Helper function to upload texture to Shopify Files API
 async function uploadTextureToShopify(client, textureBuffer, type) {
   const response = await client.post({
     path: 'files',
@@ -174,7 +164,6 @@ async function uploadTextureToShopify(client, textureBuffer, type) {
   return response.body.file.url;
 }
 
-// Helper function to create texture metafield
 async function createTextureMetafield(client, productId, key, value) {
   await client.post({
     path: `products/${productId}/metafields`,
@@ -189,7 +178,6 @@ async function createTextureMetafield(client, productId, key, value) {
   });
 }
 
-// Apply error handler
 router.use(handleErrors);
 
-export default router;
+module.exports = router;
