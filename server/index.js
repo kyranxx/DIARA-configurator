@@ -13,13 +13,13 @@ const mockBeads = [
     stock: 10,
     textures: {
       diffuse: "/images/placeholder-bead.jpg",
-      normal: "/images/placeholder-bead.jpg",
+      normal: "/images/placeholder-bead.jpg", 
       roughness: "/images/placeholder-bead.jpg"
     }
   }
 ];
 
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static('public'));
 
 app.get('/api/beads', (req, res) => {
   res.json(mockBeads);
