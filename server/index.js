@@ -4,39 +4,30 @@ const path = require('path');
 const app = express();
 app.use(express.json());
 
-// Mock beads data
 const mockBeads = [
   {
     id: 1,
     name: "Pearl Bead",
     price: 29.99,
-    imageUrl: "/placeholder-bead.jpg",
-    stock: 10
-  },
-  {
-    id: 2,
-    name: "Crystal Bead",
-    price: 39.99,
-    imageUrl: "/placeholder-bead.jpg",
-    stock: 15
+    imageUrl: "/images/placeholder-bead.jpg",
+    stock: 10,
+    textures: {
+      diffuse: "/images/placeholder-bead.jpg",
+      normal: "/images/placeholder-bead.jpg",
+      roughness: "/images/placeholder-bead.jpg"
+    }
   }
 ];
 
-// Serve static files
-app.use('/public', express.static('public'));
-app.use('/bundle.js', express.static('public/bundle.js'));
+app.use(express.static(path.join(__dirname, '../public')));
 
-// API routes
 app.get('/api/beads', (req, res) => {
   res.json(mockBeads);
 });
 
-// Serve index.html for all other routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
