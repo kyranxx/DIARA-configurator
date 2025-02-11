@@ -1,7 +1,8 @@
 {
-  "name": "bracelet-builder",
+  "name": "kyranxx-diara-configurator",
   "version": "1.0.0",
-  "private": true,
+  "description": "3D bracelet configurator",
+  "main": "index.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
     "dev:frontend": "webpack serve --mode development",
@@ -23,6 +24,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
+    "@babel/plugin-proposal-decorators": "^7.24.0",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
     "babel-loader": "^9.1.2",
