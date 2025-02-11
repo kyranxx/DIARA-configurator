@@ -25,7 +25,21 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader']
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  'tailwindcss',
+                  'autoprefixer',
+                ]
+              }
+            }
+          }
+        ]
       },
       {
         test: /\.(png|jpg|jpeg|gif)$/i,
@@ -71,5 +85,10 @@ module.exports = {
       chunks: 'all',
       name: false
     }
+  },
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000
   }
 };
