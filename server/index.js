@@ -22,8 +22,9 @@ const mockBeads = [
   }
 ];
 
-// Serve static files from public directory
-app.use(express.static('public'));
+// Serve static files
+app.use('/public', express.static('public'));
+app.use('/bundle.js', express.static('public/bundle.js'));
 
 // API routes
 app.get('/api/beads', (req, res) => {
