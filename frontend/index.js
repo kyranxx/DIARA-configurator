@@ -1,12 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import BraceletBuilder from './components/BraceletBuilder';
+import './index.css';
 
-body {
-  margin: 0;
-  padding: 0;
-}
-
-#root {
-  height: 100vh;
-}
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(<BraceletBuilder />);
