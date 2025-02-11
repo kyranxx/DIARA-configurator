@@ -2,10 +2,11 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+  mode: 'production',
   entry: './frontend/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'static/js/[name].[contenthash:8].js',
+    filename: '[name].[contenthash].js',
     publicPath: '/',
     clean: true
   },
@@ -15,14 +16,10 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
-        }
-      },
-      {
-        test: /\.(png|jpg|jpeg|gif)$/i,
-        type: 'asset/resource',
-        generator: {
-          filename: 'static/media/[name].[hash:8][ext]'
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react']
+          }
         }
       },
       {
@@ -37,18 +34,10 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'public/index.html',
-      inject: true
+      filename: 'index.html'
     })
   ],
-  devServer: {
-    static: {
-      directory: path.join(__dirname, 'public'),
-    },
-    historyApiFallback: true,
-    hot: true,
-    port: 3000,
-    proxy: {
-      '/api': 'http://localhost:3001'
-    }
+  optimization: {
+    minimize: true
   }
 };
