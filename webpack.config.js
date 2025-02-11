@@ -30,9 +30,12 @@ module.exports = {
     extensions: ['.js', '.jsx']
   },
   devServer: {
-    static: './public',
-    port: 3000,
+    static: {
+      directory: path.join(__dirname, 'public'),
+    },
+    historyApiFallback: true,
     hot: true,
+    port: 3000,
     proxy: {
       '/api': 'http://localhost:3001'
     }
