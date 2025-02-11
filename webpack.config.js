@@ -6,7 +6,7 @@ module.exports = {
   entry: './frontend/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[contenthash].js',
+    filename: 'static/js/[name].[contenthash:8].js',
     publicPath: '/',
     clean: true
   },
@@ -25,6 +25,13 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader', 'postcss-loader']
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'images/[name].[hash:8][ext]'
+        }
       }
     ]
   },
@@ -34,10 +41,26 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'public/index.html',
-      filename: 'index.html'
+      inject: true,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true
+      }
     })
   ],
   optimization: {
-    minimize: true
+    minimize: true,
+    splitChunks: {
+      chunks: 'all',
+      name: false
+    }
   }
 };
