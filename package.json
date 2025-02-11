@@ -7,7 +7,8 @@
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
     "dev:frontend": "webpack serve --mode development",
     "dev:backend": "nodemon server/index.js",
-    "build": "webpack --mode production",
+    "build": "webpack --mode production && npm run copy-public",
+    "copy-public": "cp -r public/images dist/images",
     "vercel-build": "npm run build",
     "start": "node server/index.js"
   },
