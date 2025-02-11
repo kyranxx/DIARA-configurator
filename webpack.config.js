@@ -3,8 +3,9 @@ const path = require('path');
 module.exports = {
   entry: './frontend/index.js',
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    path: path.resolve(__dirname, 'public'),
+    filename: 'bundle.js',
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -12,10 +13,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env', '@babel/preset-react']
-          }
+          loader: 'babel-loader'
         }
       },
       {
@@ -32,7 +30,7 @@ module.exports = {
     extensions: ['.js', '.jsx']
   },
   devServer: {
-    static: './dist',
+    static: './public',
     port: 3000,
     hot: true,
     proxy: {
