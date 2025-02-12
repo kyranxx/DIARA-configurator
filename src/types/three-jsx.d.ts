@@ -1,26 +1,33 @@
-import { ReactThreeFiber } from '@react-three/fiber';
-import type {
-  Mesh,
-  Group,
-  Object3D,
-  Material,
-  BufferGeometry,
-  Light,
-  PointLight,
-  AmbientLight,
-  SphereGeometry,
-  MeshStandardMaterial
-} from 'three';
+/// <reference types="@react-three/fiber" />
+import { ThreeElements } from '@react-three/fiber';
+import { Mesh, Group, SphereGeometry, MeshStandardMaterial } from 'three';
+
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    ambientLight: JSX.IntrinsicElements['ambientLight'];
+    pointLight: JSX.IntrinsicElements['pointLight'];
+    mesh: JSX.IntrinsicElements['mesh'];
+    sphereGeometry: JSX.IntrinsicElements['sphereGeometry'];
+    meshStandardMaterial: JSX.IntrinsicElements['meshStandardMaterial'];
+    group: JSX.IntrinsicElements['group'];
+  }
+}
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      group: ReactThreeFiber.Object3DNode<Group, typeof Group>;
-      mesh: ReactThreeFiber.Object3DNode<Mesh, typeof Mesh>;
-      ambientLight: ReactThreeFiber.Object3DNode<AmbientLight, typeof AmbientLight>;
-      pointLight: ReactThreeFiber.Object3DNode<PointLight, typeof PointLight>;
-      sphereGeometry: ReactThreeFiber.BufferGeometryNode<SphereGeometry, typeof SphereGeometry>;
-      meshStandardMaterial: ReactThreeFiber.MaterialNode<MeshStandardMaterial, typeof MeshStandardMaterial>;
+      ambientLight: { intensity?: number };
+      pointLight: { position?: [number, number, number]; intensity?: number };
+      mesh: ThreeElements['mesh'];
+      sphereGeometry: { args?: [number, number, number] };
+      meshStandardMaterial: ThreeElements['meshStandardMaterial'] & {
+        map?: THREE.Texture;
+        normalMap?: THREE.Texture;
+        roughnessMap?: THREE.Texture;
+        metalness?: number;
+        roughness?: number;
+      };
+      group: ThreeElements['group'];
     }
   }
 }
