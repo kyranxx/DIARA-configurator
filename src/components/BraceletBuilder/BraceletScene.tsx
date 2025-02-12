@@ -15,7 +15,6 @@ export const BraceletScene: React.FC<BraceletSceneProps> = ({ beads, onBeadClick
       camera={{ position: [0, 0, 5], fov: 75 }}
       style={{ width: '100%', height: '400px' }}
     >
-      <ambientLight intensity={0.5} />
       <pointLight position={[10, 10, 10]} intensity={1.0} />
       
       {beads.map((beadPos, index) => (

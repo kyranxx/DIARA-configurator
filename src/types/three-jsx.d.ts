@@ -1,18 +1,17 @@
-import { ThreeElements, Object3DNode } from '@react-three/fiber';
-import { AmbientLight } from 'three';
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      ambientLight: {
-        intensity?: number;
-      }
-    }
-  }
-}
+/// <reference types="@react-three/fiber" />
+import { ThreeElements } from '@react-three/fiber';
 
 declare module '@react-three/fiber' {
   interface ThreeElements {
-    ambientLight: Object3DNode<AmbientLight, typeof AmbientLight>;
+    mesh: any;
+    sphereGeometry: any;
+    meshStandardMaterial: any;
+    pointLight: any;
+  }
+}
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements extends ThreeElements {}
   }
 }
