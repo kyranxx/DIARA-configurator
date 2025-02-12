@@ -1,31 +1,15 @@
 const express = require('express');
 const path = require('path');
+const beadsRouter = require('./routes/api/beads');
 
 const app = express();
 app.use(express.json());
-
-const mockBeads = [
-  {
-    id: 1,
-    name: "Pearl Bead",
-    price: 29.99,
-    imageUrl: "/images/placeholder-bead.jpg",
-    stock: 10,
-    textures: {
-      diffuse: "/images/placeholder-bead.jpg",
-      normal: "/images/placeholder-bead.jpg", 
-      roughness: "/images/placeholder-bead.jpg"
-    }
-  }
-];
 
 // Serve static files from the dist directory
 app.use(express.static(path.join(__dirname, '../dist')));
 
 // API routes
-app.get('/api/beads', (req, res) => {
-  res.json(mockBeads);
-});
+app.use('/api/beads', beadsRouter);
 
 // Handle SPA routing
 app.get('*', (req, res) => {

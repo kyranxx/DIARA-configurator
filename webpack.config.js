@@ -1,14 +1,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-module.exports = {
+const config = {
   mode: 'production',
   entry: './frontend/index.js',
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'static/js/[name].[contenthash:8].js',
-    publicPath: '/',
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, './dist'),
     clean: true
   },
   module: {
@@ -16,37 +14,11 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env', '@babel/preset-react']
-          }
-        }
+        use: 'babel-loader'
       },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                plugins: [
-                  'tailwindcss',
-                  'autoprefixer',
-                ]
-              }
-            }
-          }
-        ]
-      },
-      {
-        test: /\.(png|jpg|jpeg|gif)$/i,
-        type: 'asset/resource',
-        generator: {
-          filename: 'static/media/[name].[hash:8][ext]'
-        }
+        use: ['style-loader', 'css-loader', 'postcss-loader']
       }
     ]
   },
@@ -55,40 +27,14 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'public/index.html',
-      inject: true,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true
-      }
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: 'public/images',
-          to: 'images'
-        }
-      ]
+      template: 'public/index.html'
     })
-  ],
-  optimization: {
-    minimize: true,
-    splitChunks: {
-      chunks: 'all',
-      name: false
-    }
-  },
-  performance: {
-    hints: false,
-    maxEntrypointSize: 512000,
-    maxAssetSize: 512000
-  }
+  ]
 };
+
+console.log('Webpack config:');
+console.log('Entry:', path.resolve(__dirname, config.entry));
+console.log('Output path:', config.output.path);
+console.log('Template path:', path.resolve(__dirname, 'public/index.html'));
+
+module.exports = config;

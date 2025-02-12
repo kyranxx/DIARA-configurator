@@ -6,13 +6,6 @@
     {
       "src": "api/*.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "zeroConfig": true
-      }
     }
   ],
   "routes": [
@@ -21,22 +14,17 @@
       "dest": "/api/$1.js"
     },
     {
-      "handle": "filesystem"
-    },
-    {
       "src": "/static/(.*)",
       "headers": { "cache-control": "public, max-age=31536000, immutable" },
-      "continue": true
+      "dest": "/static/$1"
     },
     {
       "src": "/images/(.*)",
       "headers": { "cache-control": "public, max-age=31536000, immutable" },
-      "continue": true
+      "dest": "/images/$1"
     },
     {
-      "src": "/(.*\\.[a-z0-9]+$)",
-      "headers": { "cache-control": "public, max-age=31536000, immutable" },
-      "continue": true
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
