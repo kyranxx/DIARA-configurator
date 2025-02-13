@@ -1,40 +1,64 @@
 # DIARA Bracelet Configurator
 
-3D customizable bracelet builder for Shopify store.
+A 3D bracelet configuration tool built with React, Three.js, and TypeScript.
 
-## Features
-- 3D visualization using Three.js
-- Real-time bracelet customization
-- Shopify integration
-- Mobile responsive design
+## Project Overview
+- **Repository**: https://github.com/kyranxx/DIARA-configurator
+- **Deployment**: https://diara-configurator.vercel.app
+- **Stack**: React, Three.js, TypeScript, Webpack, Tailwind CSS
 
-## Installation
+## Getting Started
+
+### Prerequisites
+- Node.js >= 14.0.0
+- npm or yarn
+
+### Installation
+1. Clone the repository:
+```bash
+git clone https://github.com/kyranxx/DIARA-configurator.git
+cd DIARA-configurator
+```
+
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-## Development
+### Development
+Run the development server:
 ```bash
 npm run dev
 ```
+This will start:
+- Frontend at http://localhost:3000
+- Backend at http://localhost:3001
 
-## Build
+### Building
+Build for production:
 ```bash
 npm run build
 ```
 
-## Project Structure
-- `/frontend` - React components and UI
-- `/server` - Express backend and Shopify integration
-- `/public` - Static assets and build output
+### Testing
+Run tests:
+```bash
+npm run typecheck  # TypeScript checks
+npm run lint      # ESLint
+```
 
-## Tech Stack
-- React
-- Three.js
-- Express
-- Shopify API
-- Webpack
-- Tailwind CSS
+## Project Structure
+- `/src` - Frontend source code
+  - `/components` - React components
+  - `/contexts` - React contexts
+  - `/types` - TypeScript type definitions
+- `/server` - Backend API
+- `/public` - Static assets
+
+## Contributing
+1. Check the tracker.md file for current tasks and priorities
+2. Create a feature branch
+3. Submit a pull request
 
 ## License
 MIT
