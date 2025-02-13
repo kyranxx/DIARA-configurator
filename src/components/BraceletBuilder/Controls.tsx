@@ -1,31 +1,41 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useBeadContext, beadActions } from '../../contexts/BeadContext';
 import type { Bead } from '../../../types';
 
-interface ControlsProps {
-  beads: Bead[];
-  selectedBeadIndex: number | null;
-  onBeadSelect: (bead: Bead) => void;
-  onRotationChange: (axis: 'x' | 'y' | 'z', value: number) => void;
-  totalPrice: number;
-}
+export const Controls: React.FC = () => {
+  const { state, dispatch } = useBeadContext();
+  const { availableBeads, selectedBeads, selectedBeadIndex, isLoading } = state;
 
-export const Controls: React.FC<ControlsProps> = ({
-  beads,
-  selectedBeadIndex,
-  onBeadSelect,
-  onRotationChange,
-  totalPrice,
-}) => {
+  const handleBeadSelect = useCallback((bead: Bead) => {
+    dispatch(beadActions.addSelectedBead({
+      index: selectedBeads.length,
+      bead,
+      rotation: [0, 0, 0],
+    }));
+  }, [dispatch, selectedBeads.length]);
+
+  const handleRotationChange = useCallback((axis: 'x' | 'y' | 'z', value: number) => {
+    if (selectedBeadIndex === null) return;
+
+    const rotation = [...selectedBeads[selectedBeadIndex].rotation];
+    const axisIndex = { x: 0, y: 1, z: 2 }[axis];
+    rotation[axisIndex] = (value * Math.PI) / 180;
+    
+    dispatch(beadActions.updateBeadRotation(selectedBeadIndex, rotation as [number, number, number]));
+  }, [dispatch, selectedBeadIndex, selectedBeads]);
+
+  const totalPrice = selectedBeads.reduce((sum, pos) => sum + pos.bead.price, 0);
   return (
     <div className="p-4 bg-white shadow rounded">
       <div className="mb-4">
         <h3 className="text-lg font-semibold mb-2">Available Beads</h3>
         <div className="grid grid-cols-3 gap-2">
-          {beads.map((bead) => (
+          {availableBeads.map((bead) => (
             <button
               key={bead.id}
-              onClick={() => onBeadSelect(bead)}
-              className="p-2 border rounded hover:bg-gray-100"
+              onClick={() => handleBeadSelect(bead)}
+              className="p-2 border rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isLoading}
             >
               <img src={bead.imageUrl} alt={bead.name} className="w-full h-auto" />
               <p className="mt-1 text-sm">{bead.name}</p>
@@ -47,8 +57,9 @@ export const Controls: React.FC<ControlsProps> = ({
                   min="0"
                   max="360"
                   step="1"
-                  onChange={(e) => onRotationChange(axis as 'x' | 'y' | 'z', Number(e.target.value))}
-                  className="flex-1"
+                  onChange={(e) => handleRotationChange(axis as 'x' | 'y' | 'z', Number(e.target.value))}
+                  className="flex-1 disabled:opacity-50"
+                  disabled={isLoading}
                 />
               </div>
             ))}
