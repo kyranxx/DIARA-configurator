@@ -6,11 +6,12 @@ const config = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   entry: './src/index.tsx',
   output: {
-    filename: '[name].[contenthash:8].js',
-    chunkFilename: '[name].[contenthash:8].chunk.js',
+    filename: 'static/js/[name].[contenthash:8].js',
+    chunkFilename: 'static/js/[name].[contenthash:8].chunk.js',
+    assetModuleFilename: 'static/media/[name].[hash][ext]',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
-    publicPath: ''
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -31,6 +32,10 @@ const config = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader', 'postcss-loader']
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif|svg|ico)$/i,
+        type: 'asset/resource'
       }
     ]
   },
