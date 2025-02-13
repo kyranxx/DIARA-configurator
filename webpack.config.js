@@ -59,7 +59,6 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'public/index.html',
-      favicon: 'public/favicon.ico',
       inject: true,
       minify: process.env.NODE_ENV === 'production' ? {
         removeComments: true,
@@ -80,7 +79,7 @@ const config = {
           from: 'public',
           to: '',
           globOptions: {
-            ignore: ['**/index.html', '**/favicon.ico']
+            ignore: ['**/index.html']
           }
         }
       ]
