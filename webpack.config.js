@@ -37,10 +37,7 @@ const config = {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
-              modules: {
-                auto: true,
-                localIdentName: '[name]__[local]--[hash:base64:5]'
-              }
+              modules: false
             }
           },
           {
