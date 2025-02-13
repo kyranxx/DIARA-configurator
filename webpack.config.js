@@ -11,7 +11,7 @@ const config = {
     assetModuleFilename: 'static/media/[name].[hash][ext]',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
-    publicPath: ''
+    publicPath: '/'
   },
   module: {
     rules: [
