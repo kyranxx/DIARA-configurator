@@ -6,11 +6,11 @@ const config = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   entry: './src/index.tsx',
   output: {
-    filename: 'static/js/[name].[contenthash:8].js',
-    chunkFilename: 'static/js/[name].[contenthash:8].chunk.js',
+    filename: '[name].[contenthash:8].js',
+    chunkFilename: '[name].[contenthash:8].chunk.js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
-    publicPath: '/'
+    publicPath: ''
   },
   module: {
     rules: [
@@ -47,7 +47,7 @@ const config = {
       template: 'public/index.html',
       favicon: 'public/favicon.ico',
       inject: true,
-      minify: {
+      minify: process.env.NODE_ENV === 'production' ? {
         removeComments: true,
         collapseWhitespace: true,
         removeRedundantAttributes: true,
@@ -58,7 +58,7 @@ const config = {
         minifyJS: true,
         minifyCSS: true,
         minifyURLs: true
-      }
+      } : false
     }),
     new CopyWebpackPlugin({
       patterns: [
