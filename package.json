@@ -72,5 +72,11 @@
   },
   "engines": {
     "node": ">=14.0.0"
+  },
+  "resolutions": {
+    "lodash": "^4.17.21"
+  },
+  "overrides": {
+    "lodash": "^4.17.21"
   }
 }

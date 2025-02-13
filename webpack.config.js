@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const config = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
@@ -8,7 +9,7 @@ const config = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
-    publicPath: '/'
+    publicPath: './'
   },
   module: {
     rules: [
@@ -44,12 +45,31 @@ const config = {
     new HtmlWebpackPlugin({
       template: 'public/index.html',
       favicon: 'public/favicon.ico'
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { 
+          from: 'public',
+          to: '',
+          globOptions: {
+            ignore: ['**/index.html', '**/favicon.ico']
+          }
+        }
+      ]
     })
   ],
   devServer: {
     historyApiFallback: true,
     hot: true,
-    port: 3000
+    port: 3000,
+    static: {
+      directory: path.join(__dirname, 'public')
+    }
+  },
+  performance: {
+    hints: process.env.NODE_ENV === 'production' ? 'warning' : false,
+    maxAssetSize: 512000,
+    maxEntrypointSize: 512000
   }
 };
 
