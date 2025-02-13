@@ -40,17 +40,7 @@ const config = {
               modules: false
             }
           },
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                plugins: [
-                  'tailwindcss',
-                  'autoprefixer'
-                ]
-              }
-            }
-          }
+          'postcss-loader'
         ]
       },
       {
