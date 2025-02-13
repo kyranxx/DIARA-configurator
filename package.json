@@ -8,7 +8,7 @@
     "dev:frontend": "webpack serve --mode development",
     "dev:backend": "nodemon server/index.js",
     "prebuild": "rimraf dist",
-    "build": "cross-env NODE_ENV=production webpack --mode production",
+    "build": "cross-env NODE_ENV=production webpack --mode production && cp public/index.html dist/",
     "start": "node server/index.js",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",

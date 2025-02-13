@@ -1,17 +1,27 @@
 {
   "version": 2,
+  "framework": "nextjs",
   "builds": [
     {
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist",
-        "buildCommand": "npm run build"
+        "zeroConfig": true,
+        "distDir": "dist"
       }
     }
   ],
   "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    {
+      "src": "/static/(.*)",
+      "headers": { "cache-control": "s-maxage=31536000, immutable" },
+      "dest": "/static/$1"
+    },
+    { "src": "/favicon.ico", "dest": "/favicon.ico" },
+    {
+      "src": "/(.*)",
+      "headers": { "cache-control": "s-maxage=0" },
+      "dest": "/index.html"
+    }
   ]
 }
