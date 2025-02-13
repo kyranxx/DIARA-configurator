@@ -36,10 +36,24 @@ const config = {
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 1
+              importLoaders: 1,
+              modules: {
+                auto: true,
+                localIdentName: '[name]__[local]--[hash:base64:5]'
+              }
             }
           },
-          'postcss-loader'
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  'tailwindcss',
+                  'autoprefixer'
+                ]
+              }
+            }
+          }
         ]
       },
       {
