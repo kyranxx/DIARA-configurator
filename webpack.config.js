@@ -6,10 +6,11 @@ const config = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   entry: './src/index.tsx',
   output: {
-    filename: 'bundle.js',
+    filename: 'static/js/[name].[contenthash:8].js',
+    chunkFilename: 'static/js/[name].[contenthash:8].chunk.js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
-    publicPath: './'
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -44,11 +45,24 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'public/index.html',
-      favicon: 'public/favicon.ico'
+      favicon: 'public/favicon.ico',
+      inject: true,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true
+      }
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { 
+        {
           from: 'public',
           to: '',
           globOptions: {
