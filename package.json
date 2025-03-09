@@ -10,7 +10,7 @@
     "prebuild": "node -e \"if (require('fs').existsSync('dist')) require('fs').rmSync('dist', { recursive: true })\"",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "webpack-build": "webpack --mode production",
-    "vercel-build": "NODE_ENV=production npm run webpack-build && tsc -p tsconfig.server.json",
+    "vercel-build": "NODE_ENV=production npx webpack --mode production && npx tsc -p tsconfig.server.json",
     "start": "ts-node -P tsconfig.server.json server/index.ts",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
