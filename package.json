@@ -61,6 +61,7 @@
     "html-webpack-plugin": "^5.5.0",
     "nodemon": "^3.1.9",
     "postcss": "^8.5.2",
+    "postcss-import": "^16.1.0",
     "postcss-loader": "^8.1.1",
     "prettier": "^3.5.0",
     "style-loader": "^3.3.2",
