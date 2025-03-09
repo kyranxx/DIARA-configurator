@@ -27,8 +27,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sharp": "^0.32.0",
-    "three": "^0.173.0",
-    "three-mesh-bvh": "^0.8.0"
+    "three": "^0.150.1",
+    "three-mesh-bvh": "^0.5.23"
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
@@ -46,7 +46,7 @@
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@types/sharp": "^0.31.1",
-    "@types/three": "0.158.0",
+    "@types/three": "^0.150.1",
     "@typescript-eslint/eslint-plugin": "^8.24.0",
     "@typescript-eslint/parser": "^8.24.0",
     "autoprefixer": "^10.4.20",
