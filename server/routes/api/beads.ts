@@ -3,6 +3,7 @@ import multer from 'multer';
 import sharp from 'sharp';
 import path from 'path';
 import type { Bead } from '../../../types';
+import { TextureProcessor, TextureSize } from '../../utils/textureProcessor';
 
 const router = express.Router();
 
@@ -43,28 +44,29 @@ router.post('/', upload.single('image'), async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Process image and create variations
+    // Process image and create variations using TextureProcessor
     const timestamp = Date.now();
     const filename = `bead-${timestamp}`;
     const imageBuffer = req.file.buffer;
-
-    // Save different texture maps
-    const [diffuse, normal, roughness] = await Promise.all([
-      sharp(imageBuffer)
-        .resize(512, 512)
-        .jpeg({ quality: 90 })
-        .toFile(path.join(__dirname, `../../../src/assets/images/${filename}-diffuse.jpg`)),
-      sharp(imageBuffer)
-        .resize(512, 512)
-        .greyscale()
-        .normalise()
-        .jpeg({ quality: 90 })
-        .toFile(path.join(__dirname, `../../../src/assets/images/${filename}-normal.jpg`)),
-      sharp(imageBuffer)
-        .resize(512, 512)
-        .greyscale()
-        .jpeg({ quality: 90 })
-        .toFile(path.join(__dirname, `../../../src/assets/images/${filename}-roughness.jpg`))
+    const outputDir = path.join(__dirname, '../../../src/assets/images');
+    
+    // Create texture processor with high quality settings
+    const processor = new TextureProcessor({
+      defaultSize: TextureSize.MEDIUM,
+      quality: 90
+    });
+    
+    // Process the image to generate textures
+    const processedTextures = await processor.processBeadTexture(imageBuffer);
+    
+    // Save the processed textures to files
+    await Promise.all([
+      sharp(processedTextures.textures.diffuse)
+        .toFile(path.join(outputDir, `${filename}-diffuse.jpg`)),
+      sharp(processedTextures.textures.normal)
+        .toFile(path.join(outputDir, `${filename}-normal.jpg`)),
+      sharp(processedTextures.textures.roughness)
+        .toFile(path.join(outputDir, `${filename}-roughness.jpg`))
     ]);
 
     const newBead: Bead = {

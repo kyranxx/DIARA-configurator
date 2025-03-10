@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import { useBeadContext, beadActions } from '../../contexts/BeadContext';
-import type { Bead } from '../../../types';
+import { useBeadContext, beadActions } from '@/contexts/BeadContext';
+import type { Bead } from '@/types';
 
 export const Controls: React.FC = () => {
   const { state, dispatch } = useBeadContext();

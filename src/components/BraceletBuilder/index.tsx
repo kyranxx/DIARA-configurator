@@ -2,8 +2,8 @@ import React, { useCallback, Suspense, useEffect } from 'react';
 import { BraceletScene } from './BraceletScene';
 import { Controls } from './Controls';
 import { ErrorBoundary } from '../ErrorBoundary';
-import { useBeadContext, beadActions } from '../../contexts/BeadContext';
-import type { Bead } from '../../../types';
+import { useBeadContext, beadActions } from '@/contexts/BeadContext';
+import type { Bead } from '@/types';
 
 interface BraceletBuilderProps {
   availableBeads: Bead[];

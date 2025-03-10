@@ -45,6 +45,12 @@ export interface BraceletSceneProps {
   onBeadClick: (index: number) => void;
 }
 
+// Bracelet Configuration
+export interface BraceletConfig {
+  beads: BeadPosition[];
+  totalPrice: number;
+}
+
 // Error Types
 export interface ApiError {
   code: string;
