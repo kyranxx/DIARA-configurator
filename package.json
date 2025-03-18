@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "3D bracelet configurator",
   "main": "server/index.ts",
+  "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
     "dev:frontend": "webpack serve --mode development",
     "dev:backend": "ts-node-dev --respawn -P tsconfig.server.json server/index.ts",
-    "prebuild": "node -e \"if (require('fs').existsSync('dist')) require('fs').rmSync('dist', { recursive: true })\"",
+    "prebuild": "node --eval \"import fs from 'fs'; if (fs.existsSync('dist')) fs.rmSync('dist', { recursive: true });\"",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "webpack-build": "webpack --mode production",
     "vercel-build": "node vercel-build.js",
@@ -26,7 +27,7 @@
     "multer": "1.4.5-lts.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "sharp": "0.30.7",
+    "sharp": "0.29.3",
     "three": "0.154.0",
     "three-mesh-bvh": "0.6.0",
     "zustand": "4.4.1"

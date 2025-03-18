@@ -3,7 +3,11 @@
   "buildCommand": "npm run vercel-build",
   "installCommand": "npm install --legacy-peer-deps",
   "env": {
-    "SHARP_IGNORE_GLOBAL_LIBVIPS": "true"
+    "SHARP_IGNORE_GLOBAL_LIBVIPS": "true",
+    "SHARP_DIST_BASE_URL": "https://npmmirror.com/mirrors/sharp-libvips",
+    "npm_config_sharp_libvips_binary_host": "https://npmmirror.com/mirrors/sharp-libvips",
+    "npm_config_sharp_binary_host": "https://npmmirror.com/mirrors/sharp",
+    "SHARP_LIBVIPS_VERSION": "8.10.5"
   },
   "outputDirectory": "dist",
   "framework": null,
