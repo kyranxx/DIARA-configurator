@@ -26,7 +26,7 @@
     "multer": "1.4.5-lts.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "sharp": "0.32.0",
+    "sharp": "0.30.7",
     "three": "0.154.0",
     "three-mesh-bvh": "0.6.0",
     "zustand": "4.4.1"
@@ -76,7 +76,7 @@
     "webpack-dev-server": "^4.13.1"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": "18.x"
   },
   "resolutions": {
     "lodash": "^4.17.21"
