@@ -111,17 +111,17 @@ export class TextureProcessor {
     }
   }
 
-  async generateNormalMap(buffer: Buffer, size: TextureSize): Promise<Buffer> {
+  async generateNormalMap(_buffer: Buffer, _size: TextureSize): Promise<Buffer> {
     // Return placeholder normal map
     return NORMAL_SVG;
   }
 
-  async generateRoughnessMap(buffer: Buffer, size: TextureSize): Promise<Buffer> {
+  async generateRoughnessMap(_buffer: Buffer, _size: TextureSize): Promise<Buffer> {
     // Return placeholder roughness map
     return ROUGHNESS_SVG;
   }
 
-  async optimizeTexture(buffer: Buffer, size: TextureSize): Promise<Buffer> {
+  async optimizeTexture(buffer: Buffer, _size: TextureSize): Promise<Buffer> {
     // Just return the original buffer
     return buffer;
   }

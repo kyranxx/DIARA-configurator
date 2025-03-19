@@ -46,5 +46,5 @@
       }
     }
   ],
-  "ignorePatterns": ["build/**/*", "dist/**/*", "node_modules/**/*"]
+  "ignorePatterns": ["build/**/*", "dist/**/*", "node_modules/**/*", "webpack.config.cjs", "babel.config.cjs"]
 }
