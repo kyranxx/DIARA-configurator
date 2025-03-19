@@ -21,6 +21,7 @@ const config = {
         use: {
           loader: 'babel-loader',
           options: {
+            configFile: path.resolve(__dirname, 'babel.config.cjs'),
             presets: [
               '@babel/preset-env',
               '@babel/preset-react',
