@@ -9,7 +9,7 @@ chmod -R 755 node_modules/.bin/ || true
 
 # Build the frontend
 echo "Building frontend..."
-node_modules/.bin/webpack --mode production
+node_modules/.bin/webpack --mode production --config webpack.config.cjs
 
 # Build the server
 echo "Building server..."
