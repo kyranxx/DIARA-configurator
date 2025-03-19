@@ -2,16 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 import type { Bead } from '../../../types';
-import { TextureSize } from '../../utils/textureProcessor';
-import { TextureProcessor as OriginalTextureProcessor } from '../../utils/textureProcessor';
-import { TextureProcessorVercel } from '../../utils/textureProcessorVercel';
-
-// Check if running on Vercel
-const isVercel = process.env.VERCEL === '1';
-
-// Use the appropriate TextureProcessor based on environment
-// This helps avoid Sharp-related issues in Vercel
-const TextureProcessor = isVercel ? TextureProcessorVercel : OriginalTextureProcessor;
+import { TextureProcessor, TextureSize } from '../../utils/textureProcessor';
 
 const router = express.Router();
 
@@ -67,30 +58,13 @@ router.post('/', upload.single('image'), async (req, res) => {
     // Process the image to generate textures
     const processedTextures = await processor.processBeadTexture(imageBuffer);
     
-    // Save the processed textures to files
-    if (isVercel) {
-      // In Vercel, we'll use a simpler approach without Sharp
-      // Using dynamic import to avoid ESLint errors
-      const fsPromises = await import('fs/promises');
-      await Promise.all([
-        fsPromises.writeFile(path.join(outputDir, `${filename}-diffuse.jpg`), processedTextures.textures.diffuse),
-        fsPromises.writeFile(path.join(outputDir, `${filename}-normal.jpg`), processedTextures.textures.normal),
-        fsPromises.writeFile(path.join(outputDir, `${filename}-roughness.jpg`), processedTextures.textures.roughness)
-      ]);
-    } else {
-      // In local development, use Sharp
-      // Using dynamic import to avoid ESLint errors
-      const sharpModule = await import('sharp');
-      const sharp = sharpModule.default;
-      await Promise.all([
-        sharp(processedTextures.textures.diffuse)
-          .toFile(path.join(outputDir, `${filename}-diffuse.jpg`)),
-        sharp(processedTextures.textures.normal)
-          .toFile(path.join(outputDir, `${filename}-normal.jpg`)),
-        sharp(processedTextures.textures.roughness)
-          .toFile(path.join(outputDir, `${filename}-roughness.jpg`))
-      ]);
-    }
+    // Save the processed textures to files using fs
+    const fsPromises = await import('fs/promises');
+    await Promise.all([
+      fsPromises.writeFile(path.join(outputDir, `${filename}-diffuse.jpg`), processedTextures.textures.diffuse),
+      fsPromises.writeFile(path.join(outputDir, `${filename}-normal.jpg`), processedTextures.textures.normal),
+      fsPromises.writeFile(path.join(outputDir, `${filename}-roughness.jpg`), processedTextures.textures.roughness)
+    ]);
 
     const newBead: Bead = {
       id: beads.length + 1,

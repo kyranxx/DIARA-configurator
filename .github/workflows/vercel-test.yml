@@ -1,0 +1,55 @@
+name: Vercel Deployment Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test-vercel-deployment:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm install --legacy-peer-deps
+      
+    - name: Run build process
+      run: npm run vercel-build
+      
+    - name: Create GitHub Issue on failure
+      if: failure()
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const { owner, repo } = context.repo;
+          const run_link = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
+          
+          await github.rest.issues.create({
+            owner,
+            repo,
+            title: `🚨 Vercel Deployment Test Failed - ${new Date().toISOString().split('T')[0]}`,
+            body: `The Vercel deployment test has failed.
+            
+            ## Details
+            - Commit: ${context.sha}
+            - Workflow Run: [View Details](${run_link})
+            
+            Please check the workflow logs for more details on the failure.`,
+            labels: ['bug', 'vercel-deployment']
+          });
+          
+    - name: Notify on success
+      if: success()
+      run: echo "✅ Vercel deployment test passed successfully!"
