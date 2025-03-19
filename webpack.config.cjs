@@ -35,7 +35,14 @@ const config = {
         use: [
           'style-loader',
           'css-loader',
-          'postcss-loader'
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                config: path.resolve(__dirname, 'postcss.config.cjs')
+              }
+            }
+          }
         ]
       },
       {
