@@ -3,14 +3,9 @@
 # Set production environment
 export NODE_ENV=production
 
-# Install libvips dependencies
-echo "Installing libvips dependencies..."
-apt-get update -y || true
-apt-get install -y libvips-dev || true
-
 # Fix permissions for prebuild-install
 echo "Fixing permissions..."
-chmod -R 755 node_modules/.bin/
+chmod -R 755 node_modules/.bin/ || true
 
 # Build the frontend
 echo "Building frontend..."
